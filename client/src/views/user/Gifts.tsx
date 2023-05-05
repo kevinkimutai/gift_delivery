@@ -1,5 +1,5 @@
 import React from "react";
-import { GiftRow, ShopNavigation } from "../components";
+import { GiftRow, ShopNavigation } from "../../components";
 
 const Gifts = () => {
   return (

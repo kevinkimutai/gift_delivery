@@ -1,5 +1,5 @@
 import React from "react";
-import { ShopNavigation } from "../components";
+import { ShopNavigation } from "../../components";
 
 const GiftId = () => {
   return (

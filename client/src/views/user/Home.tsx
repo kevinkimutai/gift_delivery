@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Banner, Footer, Services, Steps } from "../components";
+import { Banner, Footer, Services, Steps } from "../../components";
 import { HashLoader } from "react-spinners";
 
 const Home = () => {
