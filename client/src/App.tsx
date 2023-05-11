@@ -9,6 +9,8 @@ import {
   Dashboard,
   HomeDashBoard,
   AddGift,
+  Login,
+  Signup,
 } from "./views";
 import { Routes, Route } from "react-router-dom";
 
@@ -26,6 +28,10 @@ function App() {
           <Route path="/admin/orders" element={<AdminOrders />} />
           <Route path="/admin/add-gift" element={<AddGift />} />
         </Route>
+
+        {/*Auth Route */}
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/signup" element={<Signup />} />
       </Routes>
     </>
   );

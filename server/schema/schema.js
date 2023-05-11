@@ -101,7 +101,7 @@ const Mutation = new GraphQLObjectType({
           numOrders: args.numOrders,
           countInStock: args.countInStock,
         });
-
+        console.log("Adding new Gift");
         return gift;
       },
     },

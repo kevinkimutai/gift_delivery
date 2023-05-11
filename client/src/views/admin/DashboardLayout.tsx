@@ -1,5 +1,8 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 
 const Dashboard = () => {
   return (
@@ -29,6 +32,7 @@ const Dashboard = () => {
         <nav className="bg-purple-400 p-4 text-white shadow-sm">
           Navigation Bar
         </nav>
+        <ToastContainer />
         <section className="p-2">
           <Outlet />
         </section>

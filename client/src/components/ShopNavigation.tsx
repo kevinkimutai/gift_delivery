@@ -23,12 +23,12 @@ const ShopNavigation = () => {
       </div>
       <div className="flex justify-center items-center">
         <div className="flex justify-center items-center mr-6">
-          <HiUser />
-          <span>User</span>
+          <HiUser className="mr-1" />
+          <span className="text-purple-700">User</span>
         </div>
         <div className="flex justify-center items-center">
-          <HiShoppingCart />
-          <span>Cart</span>
+          <HiShoppingCart className="mr-1" />
+          <span className="text-purple-700">Cart</span>
         </div>
       </div>
     </section>
