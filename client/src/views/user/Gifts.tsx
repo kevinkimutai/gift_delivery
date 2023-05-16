@@ -6,6 +6,7 @@ const Gifts = () => {
     <main className="bg-gradient-to-r from-yellow-200 to-white overflow-hidden min-h-screen w-screen">
       <ShopNavigation />
       <GiftRow />
+      <GiftRow />
     </main>
   );
 };

@@ -9,7 +9,7 @@ const giftSchema = new mongoose.Schema(
     description: {
       text: {
         type: String,
-        required: [true, "missing name description in gift schema"],
+        required: [true, "missing  description text in gift schema"],
       },
       features: {
         type: [String],

@@ -17,7 +17,10 @@ export const GETONEGIFT = gql`
       id
       name
       price
-      category
+      category {
+        id
+        name
+      }
       description {
         text
         features

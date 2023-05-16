@@ -1,48 +1,60 @@
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import express from "express";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
-import schema from "./schema/schema.js";
-import { graphqlHTTP } from "express-graphql";
-import allowCors from "./allowedCors.js";
+import http from "http";
 import cors from "cors";
+import bodyParser from "body-parser";
+import resolvers from "./graphql/resolvers.js";
+import typeDefs from "./graphql/typeDefs.js";
+import { DBDataSource } from "./db/datasrc.js";
+import dotenv from "dotenv";
 
 dotenv.config();
-const PORT = 4500 || process.env.PORT;
 
+// Required logic for integrating with Express
 const app = express();
+// Our httpServer handles incoming requests to our Express app.
+// Below, we tell Apollo Server to "drain" this httpServer,
+// enabling our servers to shut down gracefully.
+const httpServer = http.createServer(app);
 
-/*TODO: ADD CORS POLICY */
-app.use(cors());
-
-mongoose
-  .connect(process.env.MONGODB_URL, {
-    useNewUrlParser: true,
-    // useCreateIndex: true,
-    useUnifiedTopology: true,
-    //useFindAndModify: false,
-  })
-  .then(() => console.log("DB connection successful!"));
-
-// Logging middleware
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  next();
+// Same ApolloServer initialization as before, plus the drain plugin
+// for our httpServer.
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
+// Ensure we wait for our server to start
+await server.start();
 
+// Set up our Express middleware to handle CORS, body parsing,
+// and our expressMiddleware function.
 app.use(
   "/graphql",
-  graphqlHTTP({
-    schema: schema,
-    graphiql: true,
-    customFormatErrorFn: (err) => {
-      console.error(err); // Log errors to the console
-      return err;
-    },
-    extensions: ({ document, variables, operationName, result }) => {
-      console.log(`GraphQL query: ${operationName}`, variables);
-      console.log(`GraphQL response:`, result);
+  cors(),
+  bodyParser.json(),
+  // expressMiddleware accepts the same arguments:
+  // an Apollo Server instance and optional configuration options
+  expressMiddleware(server, {
+    context: async () => {
+      const { cache } = server;
+      const token = null;
+      return {
+        // We create new instances of our data sources with each request.
+        // We can pass in our server's cache, contextValue, or any other
+        // info our data sources require.
+        dataSources: {
+          giftDB: new DBDataSource({ cache, token }),
+        },
+        token,
+      };
     },
   })
 );
 
-app.listen(PORT, () => console.log(`listening on port ${PORT}`));
+// Modified server startup
+await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
+
+console.log(`🚀 Server ready at http://localhost:4000/`);
