@@ -31,6 +31,7 @@ const typeDefs = gql`
     gift(id: ID): Gift
     category(id: ID): Category
     gifts: [Gift]
+    giftsByCategory(id: ID): [Gift]
     categories: [Category]
   }
 

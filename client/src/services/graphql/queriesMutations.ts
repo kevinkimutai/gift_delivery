@@ -11,6 +11,26 @@ export const GETALLGIFTS = gql`
   }
 `;
 
+export const GETALLCATEGORIES = gql`
+  query {
+    categories {
+      id
+      name
+    }
+  }
+`;
+
+export const GETGIFTSBYCATEGORY = gql`
+  query getGiftByCategory($id: ID!) {
+    giftsByCategory(id: $id) {
+      id
+      name
+      price
+      image
+    }
+  }
+`;
+
 export const GETONEGIFT = gql`
   query getGiftById($id: ID!) {
     gift(id: $id) {
@@ -34,12 +54,12 @@ export const GETONEGIFT = gql`
 export const ADD_GIFT = gql`
   mutation addNewGift(
     $name: String!
-    $description: ProductDescriptionInput!
+    $description: GiftDescriptionInput!
     $price: Int!
     $category: String!
     $image: String!
-    $numOrders: Int
     $countInStock: Int!
+    $numOrders: Int
   ) {
     addGift(
       name: $name

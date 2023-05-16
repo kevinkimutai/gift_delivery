@@ -18,7 +18,7 @@ const GiftId = () => {
         <PuffLoader color="#36d7b7" />
       ) : error ? (
         <div className="flex bg-red-500 items-center justify-center">
-          <p>something went wrong</p>
+          <p>{error.message}</p>
         </div>
       ) : (
         data && (

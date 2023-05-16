@@ -6,6 +6,8 @@ import { default as ShopNavigation } from "./ShopNavigation";
 import { default as GiftRow } from "./GiftRow";
 import { default as DashboardOverview } from "./DashboardOverview";
 import { default as OrdersTable } from "./OrdersTable";
+import { default as PromoMsg } from "./PromoMsg";
+import { default as PromoBanner } from "./PromoBanner";
 
 export {
   Banner,
@@ -16,4 +18,6 @@ export {
   GiftRow,
   DashboardOverview,
   OrdersTable,
+  PromoMsg,
+  PromoBanner,
 };

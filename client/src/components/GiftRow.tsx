@@ -3,13 +3,23 @@ import { BsFlower1 } from "react-icons/bs";
 import { FaWineBottle } from "react-icons/fa";
 
 import { useQuery } from "@apollo/client";
-import { GETALLGIFTS } from "../services/graphql/queriesMutations";
+import {
+  GETALLGIFTS,
+  GETGIFTSBYCATEGORY,
+} from "../services/graphql/queriesMutations";
 import { ClipLoader } from "react-spinners";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-const GiftRow = () => {
-  const { error, loading, data } = useQuery(GETALLGIFTS);
+type PageProps = {
+  category: { id: string; name: string };
+};
+
+const GiftRow = (props: PageProps) => {
+  console.log("HERE", props.category);
+  const { loading, error, data } = useQuery(GETGIFTSBYCATEGORY, {
+    variables: { id: props.category.id },
+  });
 
   return (
     <section className="p-10 w-full">
@@ -27,11 +37,11 @@ const GiftRow = () => {
                   {/*TODO: ADD ANIMATION TO ICON */}
                   <FaWineBottle className="mr-3" />
                 </span>
-                Wines
+                {props.category.name}
               </h2>
             </div>
             <div className="flex justify-start items-start bg-white p-4 pb-7 w-full overflow-x-scroll scrollbar-hide">
-              {data?.gifts.map((item: any) => (
+              {data?.giftsByCategory.map((item: any) => (
                 <Link to={`/gifts/${item.id}`}>
                   <div
                     key={item.id}
@@ -56,11 +66,11 @@ const GiftRow = () => {
           </>
         )}
       </div>
-      <div className="flex justify-center -mt-4">
+      {/* <div className="flex justify-center -mt-4">
         <button className="bg-purple-600 text-white py-2 px-6 rounded-md hover:scale-105 hover:duration-300 transition ease-in-out">
           View More
         </button>
-      </div>
+      </div> */}
     </section>
   );
 };

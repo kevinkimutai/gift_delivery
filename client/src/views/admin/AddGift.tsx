@@ -13,8 +13,11 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { HashLoader, PuffLoader } from "react-spinners";
-import { ADD_GIFT } from "../../services/graphql/queriesMutations";
-import { useMutation } from "@apollo/client";
+import {
+  ADD_GIFT,
+  GETALLCATEGORIES,
+} from "../../services/graphql/queriesMutations";
+import { useMutation, useQuery } from "@apollo/client";
 import { toast } from "react-toastify";
 
 const MAX_FILE_SIZE = 1024000; //1MB
@@ -28,6 +31,11 @@ const AddGift = () => {
     addNewGift,
     { loading: submitting, error: errorSubmit, data: savedData },
   ] = useMutation(ADD_GIFT);
+  const {
+    loading: categoryLoading,
+    error: categoryError,
+    data: categoriesData,
+  } = useQuery(GETALLCATEGORIES);
 
   const formik = useFormik({
     initialValues: {
@@ -159,7 +167,7 @@ const AddGift = () => {
       ) : errorSubmit ? (
         <>
           {console.log(errorSubmit)}
-          <div>Something went wrong!!!</div>
+          <div>{errorSubmit.message}</div>
         </>
       ) : (
         <form
@@ -228,14 +236,27 @@ const AddGift = () => {
             <div className="flex justify-center items-center mb-4">
               <label className="w-[7rem]">Category:</label>
               <div className="w-full">
-                <input
+                <select
                   id="category"
                   className="bg-purple-200 p-2 rounded-md w-full  focus:outline-none focus:ring-1 focus:ring-sky-400 focus:bg-transparent"
                   placeholder="category.."
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   value={formik.values.category}
-                />
+                >
+                  <option value=""></option>
+                  {categoryLoading ? (
+                    <option value="">Loading...</option>
+                  ) : categoryError ? (
+                    <option>something went wrong...</option>
+                  ) : (
+                    categoriesData.categories.map((option: any) => (
+                      <option key={option.id} value={option.id}>
+                        {option.name}
+                      </option>
+                    ))
+                  )}
+                </select>
                 {formik.touched.category && formik.errors.category ? (
                   <div className="flex justify-end">
                     <p className="text-red-600">{formik.errors.category}</p>

@@ -81,7 +81,7 @@ export class DBDataSource {
   }
 
   async getGiftsByCategory(category) {
-    const gifts = await Gift.find({ category: category.id });
+    const gifts = await Gift.find({ category });
     return gifts;
   }
 }
