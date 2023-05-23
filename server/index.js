@@ -38,15 +38,17 @@ app.use(
   // expressMiddleware accepts the same arguments:
   // an Apollo Server instance and optional configuration options
   expressMiddleware(server, {
-    context: async () => {
+    context: async ({ req }) => {
       const { cache } = server;
-      const token = null;
+      const authHeader = req.headers.authorization || "Bearer token";
+      const token = authHeader.split(" ")[1]; //  token after "Bearer "
+
       return {
         // We create new instances of our data sources with each request.
         // We can pass in our server's cache, contextValue, or any other
         // info our data sources require.
         dataSources: {
-          giftDB: new DBDataSource({ cache, token }),
+          giftDB: new DBDataSource({ cache, token }), //TOKEN IS PASSED TO THE API FOR VERIFICATION
         },
         token,
       };
@@ -57,4 +59,4 @@ app.use(
 // Modified server startup
 await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
 
-console.log(`🚀 Server ready at http://localhost:4000/`);
+console.log(`🚀 Server ready at http://localhost:4000/graphql`);

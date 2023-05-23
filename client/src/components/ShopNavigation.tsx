@@ -1,7 +1,11 @@
 import React from "react";
 import { HiBars3BottomRight, HiUser, HiShoppingCart } from "react-icons/hi2";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const ShopNavigation = () => {
+  const quantity = useSelector((state: any) => state.cartItems.quantity);
+
   return (
     <section className="flex items-center justify-between px-10 py-2 bg-white shadow-md">
       <div className="flex items-center">
@@ -24,11 +28,20 @@ const ShopNavigation = () => {
       <div className="flex justify-center items-center">
         <div className="flex justify-center items-center mr-6">
           <HiUser className="mr-1" />
-          <span className="text-purple-700">User</span>
+          {/*TODO:COME BACK TO USER */}
+          <span className="text-purple-700 cursor-pointer">User</span>
         </div>
         <div className="flex justify-center items-center">
           <HiShoppingCart className="mr-1" />
-          <span className="text-purple-700">Cart</span>
+
+          <Link to={"/user/cart"} className="relative cursor-pointer">
+            <span className="text-purple-700">Cart</span>
+            {quantity && quantity !== 0 && (
+              <span className="text-xs p-2 text-white justify-center items-center animate-bounce absolute inline-flex h-full w-full -top-3 -right-3 rounded-full bg-purple-600 opacity-75">
+                {quantity}
+              </span>
+            )}
+          </Link>
         </div>
       </div>
     </section>

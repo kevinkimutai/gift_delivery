@@ -1,5 +1,12 @@
+import { generateToken } from "../utils/generateToken.js";
+
 const resolvers = {
   Query: {
+    user: async (parent, args, { dataSources }, info) => {
+      console.log("Fetching user with id:", args.id);
+      return await dataSources.giftDB.getUser(args.id);
+    },
+
     gift: async (parent, args, { dataSources }, info) => {
       console.log("Fetching gift with id:", args.id);
       return await dataSources.giftDB.getGift(args.id);
@@ -45,6 +52,33 @@ const resolvers = {
       );
       console.log("Adding new Gift");
       return gift;
+    },
+
+    login: async (parent, args, { dataSources }, info) => {
+      console.log(args);
+      const user = await dataSources.giftDB.loginToAcc(
+        args.email,
+        args.password
+      );
+      console.log("Logging in to user");
+
+      const token = generateToken(user.id);
+      console.log(token);
+
+      return { token };
+    },
+
+    addUser: async (parent, args, { dataSources }, info) => {
+      console.log(args);
+      const user = await dataSources.giftDB.createNewUser(
+        args.fullname,
+        args.email,
+        args.password,
+        args.confirmpassword
+      );
+      console.log("creating User");
+
+      return user;
     },
   },
   Category: {

@@ -4,13 +4,40 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GETONEGIFT } from "../../services/graphql/queriesMutations";
 import { PuffLoader } from "react-spinners";
+import { useDispatch } from "react-redux";
+import { cartActions } from "../../store/features/cartReducer";
 
 const GiftId = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   const { loading, error, data } = useQuery(GETONEGIFT, { variables: { id } });
 
-  console.log(id);
+  const addToCartHandler = (product: any) => {
+    let item = { ...product, qty: 1 };
+    //set cart item to local Storage
+    let data = [];
+    data = JSON.parse(localStorage.getItem("cart")!) || [];
+
+    const matched = data.filter((items: any) => items.name === item.name);
+
+    if (matched.length > 0) {
+      localStorage.setItem("cart", JSON.stringify(data));
+    } else {
+      data.push(item);
+      localStorage.setItem("cart", JSON.stringify(data));
+    }
+
+    //set quantity to localStorage
+    const updatedData = JSON.parse(localStorage.getItem("cart")!);
+    const qty = updatedData.length;
+
+    localStorage.setItem("quantity", JSON.stringify(qty));
+
+    //set data into redux store
+    dispatch(cartActions.addToCart(item));
+  };
+
   return (
     <main className="bg-gradient-to-r from-yellow-200 to-white overflow-hidden">
       <ShopNavigation />
@@ -59,7 +86,12 @@ const GiftId = () => {
                 <button className="px-4 py-2 mr-3 ring-1 ring-white text-white">
                   Back
                 </button>
-                <button className="px-4 py-2 bg-white text-slate-500">
+                <button
+                  className="px-4 py-2 bg-white text-slate-500"
+                  onClick={() => {
+                    addToCartHandler(data.gift);
+                  }}
+                >
                   Add To Cart
                 </button>
               </div>

@@ -4,7 +4,7 @@ import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 
-const Dashboard = () => {
+const DashboardLayout = () => {
   return (
     <section className="relative flex items-start w-screen min-h-screen ">
       <aside className="fixed top-0 bottom-0 bg-yellow-200 w-[10rem] ">
@@ -41,4 +41,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardLayout;

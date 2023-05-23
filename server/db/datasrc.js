@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import Gift from "../model/gift.js";
 import Category from "../model/category.js";
+import User from "../model/user.js";
+import { generateToken } from "../utils/generateToken.js";
 
 export class DBDataSource {
   constructor(options) {
@@ -18,14 +20,35 @@ export class DBDataSource {
     return connection;
   }
 
-  async getUser() {
-    if (!this.user) {
-      // store the user, lookup by token
-      this.user = await this.dbConnection
-        .collection("user")
-        .findByToken(this.token);
+  async getUser(userId) {
+    const user = await User.findById(userId);
+    return user;
+  }
+
+  async getAllUsers() {
+    const users = await User.find({});
+    return users;
+  }
+
+  async createNewUser(fullname, email, pwd, confirmpwd) {
+    const user = new User({
+      fullname,
+      email,
+      password: pwd,
+      confirmPassword: confirmpwd,
+    });
+
+    return await user.save();
+  }
+
+  async loginToAcc(email, pwd) {
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user || !user.comparePasswords(pwd, user.password)) {
+      throw new Error(`Wrong email or password`);
     }
-    return this.user;
+
+    return user;
   }
 
   async getGift(giftId) {
@@ -53,7 +76,7 @@ export class DBDataSource {
     const category = new Category({
       name,
     });
-    return category.save();
+    return await category.save();
   }
 
   async createGift(
@@ -77,7 +100,7 @@ export class DBDataSource {
       countInStock,
       numOrders,
     });
-    return gift.save();
+    return await gift.save();
   }
 
   async getGiftsByCategory(category) {

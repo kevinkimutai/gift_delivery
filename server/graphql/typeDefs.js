@@ -1,6 +1,16 @@
 import { gql } from "graphql-tag";
 
 const typeDefs = gql`
+  type User {
+    id: ID
+    email: String
+    fullname: String
+    password: String
+    # confirmPassword: String
+    role: String
+    token: String
+  }
+
   type Gift {
     id: ID
     name: String
@@ -33,6 +43,9 @@ const typeDefs = gql`
     gifts: [Gift]
     giftsByCategory(id: ID): [Gift]
     categories: [Category]
+
+    users: [User]
+    user(id: ID!): User
   }
 
   type Mutation {
@@ -45,7 +58,18 @@ const typeDefs = gql`
       numOrders: Int
       countInStock: Int!
     ): Gift
+
     addCategory(name: String!): Category
+
+    addUser(
+      fullname: String!
+      email: String!
+      password: String!
+      # confirmPassword: String!
+      role: String
+    ): User
+
+    login(email: String!, password: String!): User
   }
 `;
 

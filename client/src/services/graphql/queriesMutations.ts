@@ -51,6 +51,15 @@ export const GETONEGIFT = gql`
   }
 `;
 
+export const GETUSER = gql`
+  query getUserById($id: ID!) {
+    user(id: $id) {
+      fullname
+      role
+    }
+  }
+`;
+
 export const ADD_GIFT = gql`
   mutation addNewGift(
     $name: String!
@@ -71,6 +80,22 @@ export const ADD_GIFT = gql`
       countInStock: $countInStock
     ) {
       name
+    }
+  }
+`;
+
+export const ADD_USER = gql`
+  mutation addNewUser($fullname: String!, $email: String!, $password: String!) {
+    addUser(fullname: $fullname, email: $email, password: $password) {
+      id
+    }
+  }
+`;
+
+export const LOGIN_USER = gql`
+  mutation loginToAcc($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
     }
   }
 `;
