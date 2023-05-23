@@ -8,7 +8,7 @@ import { PuffLoader } from "react-spinners";
 
 type PageProps = {
   allowedRoles: [string];
-  children: Element;
+  children: React.ReactNode;
 };
 
 const ProtectedRoute = (props: PageProps) => {
@@ -39,7 +39,7 @@ const ProtectedRoute = (props: PageProps) => {
     <>
       {console.log(data)}
       {data && props.allowedRoles?.includes(data?.user?.role) ? (
-        <Outlet />
+        props.children
       ) : data ? (
         <Navigate to="/unauthorized" state={{ from: location }} replace />
       ) : (

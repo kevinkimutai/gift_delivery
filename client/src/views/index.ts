@@ -8,6 +8,7 @@ import { default as AddGift } from "./admin/AddGift";
 import { default as Login } from "./auth/Login";
 import { default as Signup } from "./auth/Signup";
 import { default as ShoppingCart } from "./user/ShoppingCart";
+import { default as Unauthorized } from "./Unauthorized";
 
 export {
   Home,
@@ -20,4 +21,5 @@ export {
   Login,
   Signup,
   ShoppingCart,
+  Unauthorized,
 };
