@@ -7,7 +7,7 @@ const ShopNavigation = () => {
   const quantity = useSelector((state: any) => state.cartItems.quantity);
 
   return (
-    <section className="flex items-center justify-between px-10 py-2 bg-white shadow-md">
+    <section className="flex items-center justify-between px-10 py-2 bg-white shadow-md sticky">
       <div className="flex items-center">
         <HiBars3BottomRight className="text-4xl mr-6 cursor-pointer" />
         <img

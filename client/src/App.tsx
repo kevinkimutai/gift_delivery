@@ -12,8 +12,9 @@ import {
   Login,
   Signup,
   ShoppingCart,
+  Unauthorized,
 } from "./views";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
     <>
       <Routes>
         {/*USER ROUTES*/}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Navigate to="/gifts" />} />
         <Route path="/gifts" element={<Gifts />} />
         <Route path="/gifts/:id" element={<GiftId />} />
 
@@ -33,11 +34,10 @@ function App() {
         <Route
           path="/admin"
           element={
-            <DashboardLayout />
-            // <ProtectedRoute allowedRoles={["user"]}>
-            // {/*@ts-ignore*/}
-
-            // </ProtectedRoute>
+            <ProtectedRoute allowedRoles={["admin"]}>
+              {/*@ts-ignore*/}
+              <DashboardLayout />
+            </ProtectedRoute>
           }
         >
           <Route path="/admin/dashboard" element={<HomeDashBoard />} />
@@ -48,6 +48,8 @@ function App() {
         {/*Auth Route */}
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<Signup />} />
+
+        <Route path="/unauthorized" element={<Unauthorized />} />
       </Routes>
     </>
   );

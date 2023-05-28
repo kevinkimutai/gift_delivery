@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { BsFlower1 } from "react-icons/bs";
 import { FaWineBottle } from "react-icons/fa";
 
@@ -10,16 +10,51 @@ import {
 import { ClipLoader } from "react-spinners";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { HiArrowSmallLeft, HiArrowSmallRight } from "react-icons/hi2";
 
 type PageProps = {
   category: { id: string; name: string };
 };
 
 const GiftRow = (props: PageProps) => {
-  console.log("HERE", props.category);
+  const scrollableRef = useRef(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
+
   const { loading, error, data } = useQuery(GETGIFTSBYCATEGORY, {
     variables: { id: props.category.id },
   });
+
+  useEffect(() => {
+    const divElement: any = scrollableRef.current;
+    if (divElement) {
+      console.log(divElement.clientWidth);
+      setShowLeftArrow(divElement.scrollLeft > 0);
+      setShowRightArrow(
+        divElement.scrollLeft < divElement.scrollWidth - divElement.clientWidth
+      );
+    }
+  }, []);
+
+  const scrollToLeft = () => {
+    const divElement: any = scrollableRef.current;
+    if (divElement) {
+      divElement.scrollBy({
+        left: -divElement.clientWidth,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const scrollToRight = () => {
+    const divElement: any = scrollableRef.current;
+    if (divElement) {
+      divElement.scrollBy({
+        left: divElement.clientWidth,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
     <section className="p-10 w-full">
@@ -30,7 +65,6 @@ const GiftRow = (props: PageProps) => {
           <div>something went wrong!!!</div>
         ) : (
           <>
-            {console.log(data)}
             <div className="bg-purple-600 p-2 text-white">
               <h2 className="flex items-center text-lg">
                 <span>
@@ -40,7 +74,28 @@ const GiftRow = (props: PageProps) => {
                 {props.category.name}
               </h2>
             </div>
-            <div className="flex justify-start items-start bg-white p-4 pb-7 w-full overflow-x-scroll scrollbar-hide">
+            <div
+              ref={scrollableRef}
+              className="flex justify-start items-start bg-white p-4 pb-7 w-full overflow-x-scroll scrollbar-hide relative"
+            >
+              {/*TODO:ADD SCROLLABLE BTNS*/}
+              {/* {showLeftArrow && (
+                <button
+                  className="bg-purple-300 rounded-full p-3 absolute top-[40%] left-0 z-40"
+                  onClick={scrollToLeft}
+                >
+                  <HiArrowSmallLeft />
+                </button>
+              )}
+              {showRightArrow && (
+                <button
+                  className="bg-purple-300 rounded-full p-3 absolute top-[40%] right-0 z-40"
+                  onClick={scrollToRight}
+                >
+                  <HiArrowSmallRight />
+                </button>
+              )} */}
+
               {data?.giftsByCategory.map((item: any) => (
                 <Link to={`/gifts/${item.id}`}>
                   <div
